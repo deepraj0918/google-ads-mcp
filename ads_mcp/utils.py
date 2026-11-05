@@ -37,8 +37,8 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 # OAuth scope for the Google Ads API. Google Ads does not publish a separate
-# read-only scope; access is restricted to read methods by the tools this
-# server exposes (see ads_mcp/tools/).
+# read-only scope. Write tools live in ads_mcp/tools/mutate.py and default to
+# validate_only=True.
 _ADS_SCOPE = "https://www.googleapis.com/auth/adwords"
 
 

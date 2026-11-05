@@ -18,6 +18,31 @@ to provide several
 - `list_accessible_customers`: Returns ids of customers directly accessible
   by the user authenticating the call.
 
+### Write tools
+
+These change account data. Every write tool defaults to
+`validate_only=true`: the Google Ads API checks the request but applies
+nothing. Pass `validate_only=false` to apply the change, ideally after the user
+confirms the dry run. Statuses are limited to `ENABLED` and `PAUSED` (nothing is
+removed), and new campaigns, ad groups, ads and keywords are created `PAUSED`
+by default. Money values are in micros (1 unit of currency = 1,000,000).
+
+- `update_campaign_status`, `update_ad_group_status`, `update_ad_status`: enable or pause.
+- `update_keyword`: change a keyword's status and/or max CPC.
+- `update_campaign_budget`: set a campaign budget's daily amount.
+- `update_ad_group_bid`: set an ad group's default max CPC.
+- `add_keywords`: add keywords to an ad group.
+- `add_negative_keywords`: add campaign-level negative keywords.
+- `create_search_campaign`: create a manual-CPC Search campaign with its own budget.
+- `create_ad_group`: create a Search ad group.
+- `create_responsive_search_ad`: create a responsive search ad.
+
+Write tools need a user with Standard or Admin access to the account. Check the
+[developer token access levels](https://developers.google.com/google-ads/api/docs/get-started/dev-token#access-levels)
+for the daily operation limits that apply to your token; test with a
+[test account](https://developers.google.com/google-ads/api/docs/best-practices/test-accounts)
+first.
+
 ### Resources available
 
 - `discovery-document`: Retrieve the Google Ads API discovery document. Provides the discovery document for the latest version of the Google Ads API, which describes the API surface, including resources, methods, and schemas. Host LLMs should access this resource to understand the structure of the Google Ads API and discover available features.

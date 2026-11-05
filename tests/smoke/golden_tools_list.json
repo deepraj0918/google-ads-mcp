@@ -1,6 +1,403 @@
 {
   "tools": [
     {
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Adds keywords to an ad group.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Customer id, digits only."
+          },
+          "ad_group_id": {
+            "type": "string",
+            "description": "Ad group id."
+          },
+          "keywords": {
+            "items": {
+              "description": "A keyword to add.",
+              "properties": {
+                "text": {
+                  "description": "Keyword text, e.g. 'running shoes'.",
+                  "type": "string"
+                },
+                "match_type": {
+                  "default": "PHRASE",
+                  "enum": [
+                    "EXACT",
+                    "PHRASE",
+                    "BROAD"
+                  ],
+                  "type": "string"
+                },
+                "cpc_bid_micros": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "description": "Optional keyword-level max CPC in micros (1 unit = 1,000,000)."
+                }
+              },
+              "required": [
+                "text"
+              ],
+              "type": "object"
+            },
+            "type": "array",
+            "description": "Keywords to add, each with text, match_type and optional bid."
+          },
+          "status": {
+            "default": "PAUSED",
+            "enum": [
+              "ENABLED",
+              "PAUSED"
+            ],
+            "type": "string",
+            "description": "Status of new keywords. Defaults to PAUSED."
+          },
+          "validate_only": {
+            "default": true,
+            "type": "boolean",
+            "description": "When true (default), validate without applying."
+          }
+        },
+        "required": [
+          "customer_id",
+          "ad_group_id",
+          "keywords"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "name": "add_keywords",
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    },
+    {
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Adds campaign-level negative keywords.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Customer id, digits only."
+          },
+          "campaign_id": {
+            "type": "string",
+            "description": "Campaign id."
+          },
+          "keywords": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "description": "Negative keyword texts."
+          },
+          "match_type": {
+            "default": "PHRASE",
+            "enum": [
+              "EXACT",
+              "PHRASE",
+              "BROAD"
+            ],
+            "type": "string",
+            "description": "Match type for all given negatives. Defaults to PHRASE."
+          },
+          "validate_only": {
+            "default": true,
+            "type": "boolean",
+            "description": "When true (default), validate without applying."
+          }
+        },
+        "required": [
+          "customer_id",
+          "campaign_id",
+          "keywords"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "name": "add_negative_keywords",
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    },
+    {
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Creates a standard Search ad group in a campaign.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Customer id, digits only."
+          },
+          "campaign_id": {
+            "type": "string",
+            "description": "Campaign id."
+          },
+          "name": {
+            "type": "string",
+            "description": "Ad group name; must be unique in the campaign."
+          },
+          "cpc_bid_micros": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional default max CPC in micros."
+          },
+          "status": {
+            "default": "PAUSED",
+            "enum": [
+              "ENABLED",
+              "PAUSED"
+            ],
+            "type": "string",
+            "description": "Defaults to PAUSED."
+          },
+          "validate_only": {
+            "default": true,
+            "type": "boolean",
+            "description": "When true (default), validate without applying."
+          }
+        },
+        "required": [
+          "customer_id",
+          "campaign_id",
+          "name"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "name": "create_ad_group",
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    },
+    {
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Creates a responsive search ad.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Customer id, digits only."
+          },
+          "ad_group_id": {
+            "type": "string",
+            "description": "Ad group id."
+          },
+          "headlines": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "description": "3-15 headlines, max 30 characters each."
+          },
+          "descriptions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "description": "2-4 descriptions, max 90 characters each."
+          },
+          "final_urls": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "description": "Landing page URLs."
+          },
+          "path1": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional display path 1, max 15 characters."
+          },
+          "path2": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional display path 2, max 15 characters."
+          },
+          "status": {
+            "default": "PAUSED",
+            "enum": [
+              "ENABLED",
+              "PAUSED"
+            ],
+            "type": "string",
+            "description": "Defaults to PAUSED."
+          },
+          "validate_only": {
+            "default": true,
+            "type": "boolean",
+            "description": "When true (default), validate without applying."
+          }
+        },
+        "required": [
+          "customer_id",
+          "ad_group_id",
+          "headlines",
+          "descriptions",
+          "final_urls"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "name": "create_responsive_search_ad",
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    },
+    {
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Creates a Search campaign with its own daily budget, using manual CPC.\n\nBudget and campaign are created atomically. Targets Google Search and the\nSearch Network, not the Display Network.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Customer id, digits only."
+          },
+          "name": {
+            "type": "string",
+            "description": "Campaign name; must be unique in the account."
+          },
+          "daily_budget_micros": {
+            "type": "integer",
+            "description": "Daily budget in micros (1 unit = 1,000,000)."
+          },
+          "status": {
+            "default": "PAUSED",
+            "enum": [
+              "ENABLED",
+              "PAUSED"
+            ],
+            "type": "string",
+            "description": "Defaults to PAUSED."
+          },
+          "contains_eu_political_advertising": {
+            "default": false,
+            "type": "boolean",
+            "description": "Required declaration. Defaults to false."
+          },
+          "start_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional YYYY-MM-DD."
+          },
+          "end_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional YYYY-MM-DD."
+          },
+          "validate_only": {
+            "default": true,
+            "type": "boolean",
+            "description": "When true (default), validate without applying."
+          }
+        },
+        "required": [
+          "customer_id",
+          "name",
+          "daily_budget_micros"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "name": "create_search_campaign",
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    },
+    {
       "_meta": {
         "fastmcp": {
           "tags": []
@@ -134,6 +531,327 @@
         ],
         "type": "object",
         "x-fastmcp-wrap-result": true
+      }
+    },
+    {
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "readOnlyHint": false
+      },
+      "description": "Sets an ad group's default max CPC bid (manual CPC campaigns).",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Customer id, digits only."
+          },
+          "ad_group_id": {
+            "type": "string",
+            "description": "Ad group id."
+          },
+          "cpc_bid_micros": {
+            "type": "integer",
+            "description": "Max CPC in micros (1 unit = 1,000,000)."
+          },
+          "validate_only": {
+            "default": true,
+            "type": "boolean",
+            "description": "When true (default), validate without applying."
+          }
+        },
+        "required": [
+          "customer_id",
+          "ad_group_id",
+          "cpc_bid_micros"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "name": "update_ad_group_bid",
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    },
+    {
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "readOnlyHint": false
+      },
+      "description": "Enables or pauses an ad group.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Customer id, digits only."
+          },
+          "ad_group_id": {
+            "type": "string",
+            "description": "Ad group id."
+          },
+          "status": {
+            "enum": [
+              "ENABLED",
+              "PAUSED"
+            ],
+            "type": "string",
+            "description": "ENABLED or PAUSED."
+          },
+          "validate_only": {
+            "default": true,
+            "type": "boolean",
+            "description": "When true (default), validate without applying."
+          }
+        },
+        "required": [
+          "customer_id",
+          "ad_group_id",
+          "status"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "name": "update_ad_group_status",
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    },
+    {
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "readOnlyHint": false
+      },
+      "description": "Enables or pauses an ad (ad_group_ad).",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Customer id, digits only."
+          },
+          "ad_group_id": {
+            "type": "string",
+            "description": "Ad group id containing the ad."
+          },
+          "ad_id": {
+            "type": "string",
+            "description": "Ad id."
+          },
+          "status": {
+            "enum": [
+              "ENABLED",
+              "PAUSED"
+            ],
+            "type": "string",
+            "description": "ENABLED or PAUSED."
+          },
+          "validate_only": {
+            "default": true,
+            "type": "boolean",
+            "description": "When true (default), validate without applying."
+          }
+        },
+        "required": [
+          "customer_id",
+          "ad_group_id",
+          "ad_id",
+          "status"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "name": "update_ad_status",
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    },
+    {
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "readOnlyHint": false
+      },
+      "description": "Sets the daily amount of a campaign budget.\n\nFind the budget id with the `search` tool\n(resource campaign, field campaign.campaign_budget).",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Customer id, digits only."
+          },
+          "budget_id": {
+            "type": "string",
+            "description": "Campaign budget id."
+          },
+          "amount_micros": {
+            "type": "integer",
+            "description": "New daily budget in micros (1 unit = 1,000,000)."
+          },
+          "validate_only": {
+            "default": true,
+            "type": "boolean",
+            "description": "When true (default), validate without applying."
+          }
+        },
+        "required": [
+          "customer_id",
+          "budget_id",
+          "amount_micros"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "name": "update_campaign_budget",
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    },
+    {
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "readOnlyHint": false
+      },
+      "description": "Enables or pauses a campaign.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Customer id, digits only."
+          },
+          "campaign_id": {
+            "type": "string",
+            "description": "Campaign id."
+          },
+          "status": {
+            "enum": [
+              "ENABLED",
+              "PAUSED"
+            ],
+            "type": "string",
+            "description": "ENABLED or PAUSED."
+          },
+          "validate_only": {
+            "default": true,
+            "type": "boolean",
+            "description": "When true (default), validate without applying."
+          }
+        },
+        "required": [
+          "customer_id",
+          "campaign_id",
+          "status"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "name": "update_campaign_status",
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    },
+    {
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "readOnlyHint": false
+      },
+      "description": "Changes a keyword's status and/or max CPC bid.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Customer id, digits only."
+          },
+          "ad_group_id": {
+            "type": "string",
+            "description": "Ad group id containing the keyword."
+          },
+          "criterion_id": {
+            "type": "string",
+            "description": "Keyword criterion id (ad_group_criterion.criterion_id)."
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "ENABLED",
+                  "PAUSED"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional ENABLED or PAUSED."
+          },
+          "cpc_bid_micros": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional max CPC in micros (1 unit = 1,000,000)."
+          },
+          "validate_only": {
+            "default": true,
+            "type": "boolean",
+            "description": "When true (default), validate without applying."
+          }
+        },
+        "required": [
+          "customer_id",
+          "ad_group_id",
+          "criterion_id"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "name": "update_keyword",
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
       }
     }
   ]
